@@ -76,7 +76,15 @@ def norm_l2(point):
 
 def scalar_multiplication(point_x , point_y):
 	return point_x[0] * point_y[0] + point_x[1] * point_y[1]
-
+def calculation_cos(vector_1, vector_2):
+	res = scalar_multiplication(vector_1,vector_2)/(norm_l2(vector_1) * norm_l2(vector_2))
+	if res > 1:
+		return 1.0
+	elif res < -1:
+		return -1.0
+	else: 
+		return res
+	
 def find_point_of_vetor(matrix, minunatiae_tpye):
 	(n,m) = matrix.shape
 	if minunatiae_tpye == 0:
@@ -124,7 +132,7 @@ def find_point_of_vetor(matrix, minunatiae_tpye):
 		vector_1 = ( points[0][0] - centroi[0], points[0][1] - centroi[1] )
 		vector_2 = ( points[1][0] - centroi[0], points[1][1] - centroi[1] )
 		
-		tmp_theta = acos(scalar_multiplication(vector_1,vector_2)/(norm_l2(vector_1) * norm_l2(vector_2)))
+		tmp_theta = acos(calculation_cos(vector_1, vector_2))
 		if tmp_theta < min_theta: 
 			res_point = points[2]
 			min_theta = tmp_theta
@@ -135,7 +143,7 @@ def find_point_of_vetor(matrix, minunatiae_tpye):
 		# print(points[0])
 		# print(points[1])
 		# print(points[2])
-		tmp_theta = acos(scalar_multiplication(vector_1,vector_2)/(norm_l2(vector_1) * norm_l2(vector_2)))
+		tmp_theta = acos(calculation_cos(vector_1, vector_2))
 		if tmp_theta < min_theta: 
 			res_point = points[0]
 			min_theta = tmp_theta
@@ -143,7 +151,7 @@ def find_point_of_vetor(matrix, minunatiae_tpye):
 
 		vector_1 = ( points[2][0] - centroi[0], points[2][1] - centroi[1] )
 		vector_2 = ( points[0][0] - centroi[0], points[0][1] - centroi[1] )
-		tmp_theta = acos(scalar_multiplication(vector_1,vector_2)/(norm_l2(vector_1) * norm_l2(vector_2)))
+		tmp_theta = acos(calculation_cos(vector_1, vector_2))
 		if tmp_theta < min_theta: 
 			res_point = points[0]
 			min_theta = tmp_theta
@@ -167,7 +175,7 @@ def get_orient(point, minunatiae_tpye, matrix,oriention):
 	vector_2 = (x_centroi - point_two[0], y_centroi - point_two[1])
 	# print(vector_2)
 
-	theta = acos(scalar_multiplication(vector_1,vector_2)/(norm_l2(vector_1) * norm_l2(vector_2)))
+	theta = acos(calculation_cos(vector_1, vector_2))
 	# print(theta)
 	if vector_2[0] >= 0:
 		# print(vector_2[0])
