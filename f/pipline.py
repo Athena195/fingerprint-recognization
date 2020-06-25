@@ -3,6 +3,7 @@ from model import *
 from data import *
 import json
 import re
+import os
 
 # tìm minuntiae cho 1 ảnh
 def main1(path):
@@ -56,8 +57,9 @@ def main(path):
 
 list_obj = []
 # tim minuntiae cho bộ dữ liệu 600 ảnh cũ
+# result = '['
 # folder_path = './data/dataset/train_data/0000'
-# preprocessed_data = './data/dataset/preprocessed_data.json'
+# preprocessed_data = './data/dataset/preprocessed_600_images_data.json'
 # with open(preprocessed_data, mode='w') as f:
 # 	for i in range(10):
 # 		for j in range(80):
@@ -67,15 +69,25 @@ list_obj = []
 # 			else:
 # 				img_path += str(i) + '_' + str(j) + '.bmp'
 # 			print(img_path)
-# 			list_points = main(img_path)
-# 			img = str(folder_path.split('/')[-1:])
-# 			img = img[2:len(img) - 2]
-# 			obj = {
-# 				'img': img,
-# 				'points': list_points
-# 			}
-# 			list_obj.append(obj)
-# 			json.dump(list_obj, f)
+# 			img = str(img_path.split('/')[-1:])
+# 			print(img)
+# 			if(img_path == './data/dataset/train_data/00000_27.bmp' 
+# 				or img_path == './data/dataset/train_data/00002_52.bmp'
+# 				or img_path == './data/dataset/train_data/00005_12.bmp'
+# 				or img_path == './data/dataset/train_data/00006_56.bmp'
+# 				or img_path == './data/dataset/train_data/00006_60.bmp'):
+# 				continue
+# 			else:
+# 				img = img[2:len(img) - 2]
+# 				list_points = main(img_path)
+# 				obj = {
+# 					'img': img,
+# 					'points': list_points
+# 				}
+# 				list_obj.append(obj)
+# 				result += str(obj) + ','
+# 	result += ']'
+# 	f.write(result)
 
 # img_path = './data/dataset/real_data/00000_18.bmp'
 # with open(preprocessed_data, mode='w') as f:
@@ -88,33 +100,74 @@ list_obj = []
 # 		'points': list_points
 # 	}
 # 	list_obj.append(obj)
-# 	json.dump(list_obj, f) 
+
+# 
 
 
 # Tìm minuntiae cho bộ dữ liệu sample 80 ảnh
 # result = '['
-# folder_path = './data/dataset/sample/'
+# folder_path = './data/dataset/sample/DB'
 # preprocessed_data = './data/dataset/sample.json'
 # with open(preprocessed_data, mode='w') as f:
-# 	for i in range(101, 111):
-# 		for j in range(1, 9):
-# 			img_path = folder_path
-# 			img_path += str(i) + '_' + str(j) + '.tif'
-# 			print(img_path)
-# 			list_points = main(img_path)
-# 			img = str(img_path.split('/')[-1:])
-# 			img = img[2:len(img) - 2]
-# 			obj = {
-# 				"img": img,
-# 				"points": list_points
-# 			}
-# 			list_obj.append(obj)
-# 			result += str(obj) + ','
-# 	result += ']'
-# 	f.write(result)
-# 	json.dump(result, f)
+# 	for k in range(1, 5):
+# 		tmp_path = folder_path + str(k) + '/'
+# 		for i in range(101, 111):
+# 			for j in range(1, 9):
+# 				img_path = tmp_path
+# 				img_path += str(i) + '_' + str(j) + '.tif'
+# 				print(img_path)
+# 				list_points = main(img_path)
+# 				img = str(img_path.split('/')[-1:])
+# 				img = img[2:len(img) - 2]
+# 				obj = {
+# 					"img": img,
+# 					"points": list_points
+# 				}
+# 				list_obj.append(obj)
+# 				result += str(obj) + ','
+# 		result += ']'
+# 		f.write(result)
+# 		json.dump(result, f)
 # main('./data/dataset/sample/101_1.tif')
 
 
 # Tìm minuntiae cho từng ảnh
-main1('./data/dataset/sample/101_2.tif')
+# main1('./data/dataset/sample/101_2.tif')
+
+
+# Đọc từng ảnh trong folder
+# result = '['
+# main_path = 'D:/My Document/HK8/HeCSDLDPT/BTL/fingerprint-recognization/f/data/dataset/train_data'
+# list_imgs = os.listdir(main_path)
+# preprocessed_data = './data/dataset/preprocessed_images_data.json'
+# with open(preprocessed_data, mode='w') as f:
+# 	for i in list_imgs:
+# 		img_path = main_path + '/' + i
+# 		print(img_path)
+# 		list_points = main(img_path)
+# 		obj = {
+# 			'img': i,
+# 			'points': list_points
+# 		}
+# 		result += str(obj) + ','
+# 	result += ']'
+# 	f.write(result)
+
+def search_image(test_path, data_path):
+	with open(data_path, mode='r') as f:
+		data = json.load(f)
+		I = main(test_path)
+		return brute_force(I, data, 5, 1.)
+
+data_path = './data/dataset/preprocessed_images_data.json'
+test_path = 'D:/My Document/HK8/HeCSDLDPT/BTL/fingerprint-recognization/f/data/dataset/test_data'
+result_path = './data/dataset/result.txt'
+
+with open(result_path, mode='w') as f:
+	list_imgs = os.listdir(test_path)
+	for i in list_imgs:
+		img_path = test_path + '/' + i
+		rel = search_image(img_path, data_path)
+		f.write(i + " - " + str(rel))
+		f.write("\n")
+

@@ -40,3 +40,20 @@ show_image(ig,'resize')
 ig = equalize_historgram(ig)
 show_image(ig,'resize')
 '''
+def rest_point(point):
+    b = 0
+    x = point[0]
+    y = point[1]
+    theta = point[2]
+    k = math.tan(theta)
+    if(theta == pi/2 or theta == 3*pi/2):
+      return [x, y + 50]
+    elif(theta == 0 or theta == pi):
+      return [X+50, y]
+    elif(x == 0):
+      b = y
+    else:
+      b = float(y - k*x)
+    x1 = x+50
+    y1 = round(x1*k+b)
+    return [x1, y1]
