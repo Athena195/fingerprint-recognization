@@ -3,7 +3,8 @@ import numpy as np
 import cv2 as cv
 import matplotlib.pyplot as plt
 import pandas as pd
-
+import math
+from math import pi
 
 def read_image(path):
 	x = cv.imread(path,cv.IMREAD_GRAYSCALE)
@@ -47,13 +48,13 @@ def rest_point(point):
     theta = point[2]
     k = math.tan(theta)
     if(theta == pi/2 or theta == 3*pi/2):
-      return [x, y + 50]
+      return [x, y + 5]
     elif(theta == 0 or theta == pi):
-      return [X+50, y]
+      return [X+5, y]
     elif(x == 0):
       b = y
     else:
       b = float(y - k*x)
-    x1 = x+50
+    x1 = x+5
     y1 = round(x1*k+b)
     return [x1, y1]

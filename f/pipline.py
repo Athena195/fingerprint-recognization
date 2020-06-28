@@ -23,7 +23,9 @@ def main1(path):
 	show_image(image_thinning,'image thining')
 	list_point_minunate,result_im = get_minunatiaes_point(image_thinning,image_oriented)
 	for i  in list_point_minunate:
-		print(i)
+		point1 = [i[1][0], i[1][1], i[2]]
+		point2 = rest_point(point1)
+		cv.line(result_im, (point1[1], point1[0]), (point2[1], point2[0]), (255,255,0), 1)
 	show_image(result_im,'dd')
 	result = []
 	for i in list_point_minunate:
@@ -137,9 +139,9 @@ list_obj = []
 
 # Đọc từng ảnh trong folder
 # result = '['
-# main_path = 'D:/My Document/HK8/HeCSDLDPT/BTL/fingerprint-recognization/f/data/dataset/train_data'
+# main_path = 'D:/My Document/HK8/HeCSDLDPT/BTL/fingerprint-recognization/f/data/dataset/train1'
 # list_imgs = os.listdir(main_path)
-# preprocessed_data = './data/dataset/preprocessed_images_data.json'
+# preprocessed_data = './data/dataset/small_data.json'
 # with open(preprocessed_data, mode='w') as f:
 # 	for i in list_imgs:
 # 		img_path = main_path + '/' + i
@@ -247,42 +249,42 @@ def search_matching(I, data):
 # print(point, no_max)
 
 
-test_path = 'D:/My Document/HK8/HeCSDLDPT/BTL/fingerprint-recognization/f/data/dataset/test/DB1'
-list_test = os.listdir(test_path)
+# test_path = 'D:/My Document/HK8/HeCSDLDPT/BTL/fingerprint-recognization/f/data/dataset/test1'
+# list_test = os.listdir(test_path)
 
-data_path = './data/dataset/db1_data.json'
-data = []
+# data_path = './data/dataset/small_data.json'
+# data = []
 
-result = './data/dataset/result_db1.json'
-rel_file = open(result, mode='w')
+# result = './data/dataset/result_db1.txt'
+# rel_file = open(result, mode='w')
 
-with open(data_path, mode='r') as f:
-	data = json.load(f)
+# with open(data_path, mode='r') as f:
+# 	data = json.load(f)
 
-for test in list_test:
-	img_path = test_path + "/" + test
-	print(img_path)
-	I = main(img_path)
-	no_max = 0
-	point = []
-	for T in data:
-		check = np.zeros(len(T['points']))
-		count = 0
-		(I1, x) = hough_transform(I, T['points'])
-		print(I1, x)
-		for mi in I:
-			mi_new = rotate_image(mi, delta_x=I1[0], delta_y=I1[1], delta_t=(I1[2]*pi/180))
-			print(mi_new)
-			for i, mt in enumerate(T['points']):
-				(sd, dd) = calculate_distance(mt, mi_new)
-				if check[i] == 0 and mt[0] == mi[0] and sd < 50 and dd < pi/24:
-					count += 1
-					check[i] = 1
-		if(no_max < count):
-			no_max = count
-			point = T
-	rel_file.write(test + ' - ' + str(point) + ' - ' + str(no_max) + '\n')
-	print(point, no_max)
+# for test in list_test:
+# 	img_path = test_path + "/" + test
+# 	print(img_path)
+# 	I = main(img_path)
+# 	no_max = 0
+# 	point = []
+# 	for T in data:
+# 		check = np.zeros(len(T['points']))
+# 		count = 0
+# 		# (I1, x) = hough_transform(I, T['points'])
+# 		# print(I1, x)
+# 		for mi in I:
+# 			# mi_new = rotate_image(mi, delta_x=I1[0], delta_y=I1[1], delta_t=(I1[2]*pi/180))
+# 			# print(mi_new)
+# 			for i, mt in enumerate(T['points']):
+# 				(sd, dd) = calculate_distance(mt, mi)
+# 				if check[i] == 0 and mt[0] == mi[0] and sd < 20 and dd < pi/24:
+# 					count += 1
+# 					check[i] = 1
+# 		if(no_max < count):
+# 			no_max = count
+# 			point = T
+# 	rel_file.write(test + ' - ' + str(point) + ' - ' + str(no_max) + '\n')
+# 	print(point, no_max)
 
 
 # (I1, x) = hough_transform(I, T)
@@ -298,3 +300,5 @@ for test in list_test:
 # 			count += 1
 # 			check[i] = 1
 # print(count/len(I))
+
+main1('./data/dataset/train_data/00000_40.bmp')
